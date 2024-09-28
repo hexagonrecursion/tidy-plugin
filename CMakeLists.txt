@@ -1,41 +1,21 @@
 cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 
-# Sets the `variable` to `value` if the `variable` is not already defined
-function(set_if_not_defined variable value)
-    if(NOT DEFINED ${variable})
-        set(${variable} "${value}" PARENT_SCOPE)
-    endif()
-endfunction()
-
-
-project(clang-tidy-plugins LANGUAGES C CXX)
-
-option(BUILD_WARNINGS "Build with project's warnings setting" ON)
-option(BUILD_WARNING_AS_ERROR "Build with warning as error" ON)
-if(BUILD_WARNINGS)
-    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
-        add_compile_options(-Wall)
-    endif()
-endif()
-if(BUILD_WARNING_AS_ERROR)
-    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
-        add_compile_options(-Werror)
-    endif()
+project(clang-tidy-hello-world LANGUAGES CXX)
+find_package(LLVM REQUIRED)
+find_package(Clang REQUIRED)
+if("${LLVM_VERSION_MAJOR}" VERSION_LESS 18)
+  message(FATAL_ERROR "Found LLVM ${LLVM_VERSION_MAJOR}, but need LLVM 18 or above")
 endif()
 
-include(GNUInstallDirs)
-set_if_not_defined(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}")
-set_if_not_defined(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}")
-set_if_not_defined(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}")
+# Use the same C++ standard as LLVM 18 does
+set(CMAKE_CXX_STANDARD 17 CACHE STRING "")
 
-enable_testing()
-find_package(LLVM REQUIRED CONFIG)
-find_package(Clang REQUIRED CONFIG)
-set_if_not_defined(CMAKE_CXX_STANDARD 20)
-
+# LLVM is normally built without RTTI. Be consistent with that.
+if(NOT LLVM_ENABLE_RTTI)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
+endif()
 
 add_library(AwesomePrefixCheck MODULE "")
-target_compile_options(AwesomePrefixCheck PRIVATE -fno-rtti)
 target_include_directories(AwesomePrefixCheck
     PRIVATE
         ${CLANG_INCLUDE_DIRS}

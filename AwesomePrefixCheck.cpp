@@ -27,7 +27,7 @@ void AwesomePrefixCheck::registerMatchers(MatchFinder* Finder)
 void AwesomePrefixCheck::check(const MatchFinder::MatchResult& Result)
 {
     const auto* MatchedDecl = Result.Nodes.getNodeAs<FunctionDecl>("add_awesome_prefix");
-    if (!MatchedDecl->getIdentifier() || MatchedDecl->getName().startswith("awesome_"))
+    if (!MatchedDecl->getIdentifier() || MatchedDecl->getName().starts_with("awesome_"))
         return;
     diag(MatchedDecl->getLocation(), "function %0 is insufficiently awesome") << MatchedDecl;
     diag(MatchedDecl->getLocation(), "insert 'awesome'", DiagnosticIDs::Note) << FixItHint::CreateInsertion(MatchedDecl->getLocation(), "awesome_");

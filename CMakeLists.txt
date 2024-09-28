@@ -1,3 +1,7 @@
+# This file draws inspiration from:
+# 1. https://github.com/banach-space/clang-tutor/blob/651b62285891346843e4649392d49216724d3d05/HelloWorld/CMakeLists.txt
+# 2. https://github.com/coveooss/clang-tidy-plugin-examples/tree/47b2eec0bb31b8af095f33a326c75c7985c682c7
+
 cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 
 project(clang-tidy-hello-world LANGUAGES CXX)

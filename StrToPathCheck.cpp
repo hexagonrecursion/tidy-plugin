@@ -9,24 +9,24 @@ using namespace clang;
 using namespace clang::tidy;
 using namespace clang::ast_matchers;
 
-class AwesomePrefixCheck : public ClangTidyCheck
+class StringToPathCheck : public ClangTidyCheck
 {
 public:
-    AwesomePrefixCheck(StringRef Name, ClangTidyContext* Context) : ClangTidyCheck(Name, Context)
+    StringToPathCheck(StringRef Name, ClangTidyContext* Context) : ClangTidyCheck(Name, Context)
     {
     }
     void registerMatchers(ast_matchers::MatchFinder* Finder) override;
     void check(const ast_matchers::MatchFinder::MatchResult& Result) override;
 };
 
-void AwesomePrefixCheck::registerMatchers(MatchFinder* Finder)
+void StringToPathCheck::registerMatchers(MatchFinder* Finder)
 {
     auto hasTypeStr = hasType(type(hasUnqualifiedDesugaredType(recordType(hasDeclaration(recordDecl(hasName("::std::basic_string")))))));
     auto hasTypePath = hasType(type(hasUnqualifiedDesugaredType(recordType(hasDeclaration(recordDecl(hasName("::std::filesystem::path")))))));
     Finder->addMatcher(cxxConstructExpr(hasTypePath, hasArgument(0, expr(hasTypeStr).bind("str"))), this);
 }
 
-void AwesomePrefixCheck::check(const MatchFinder::MatchResult& Result)
+void StringToPathCheck::check(const MatchFinder::MatchResult& Result)
 {
     const auto *Str = Result.Nodes.getNodeAs<Expr>("str");
     if(!Str) return;
@@ -37,12 +37,12 @@ void AwesomePrefixCheck::check(const MatchFinder::MatchResult& Result)
 
 namespace {
 
-class AwesomePrefixCheckModule : public ClangTidyModule
+class StrToPathModule : public ClangTidyModule
 {
 public:
     void addCheckFactories(ClangTidyCheckFactories& CheckFactories) override
     {
-        CheckFactories.registerCheck<AwesomePrefixCheck>("coveo-awesomeprefixcheck");
+        CheckFactories.registerCheck<StringToPathCheck>("colobot-str2path");
     }
 };
 
@@ -51,10 +51,6 @@ public:
 namespace clang::tidy {
 
 // Register the module using this statically initialized variable.
-static ClangTidyModuleRegistry::Add<::AwesomePrefixCheckModule> awesomePrefixCheckInit("coveo-awesomeprefixcheck-module",
-                                                                                       "Adds 'coveo-awesomeprefixcheck' checks.");
-
-// This anchor is used to force the linker to link in the generated object file and thus register the module.
-volatile int awesomePrefixCheckAnchorSource = 0;
+static ClangTidyModuleRegistry::Add<::StrToPathModule> strToPathModuleInit("colobot-str2path-module", "Adds 'colobot-str2path' checks.");
 
 }  // namespace clang::tidy

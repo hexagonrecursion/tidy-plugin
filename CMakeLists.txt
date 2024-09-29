@@ -19,10 +19,10 @@ if(NOT LLVM_ENABLE_RTTI)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 endif()
 
-add_library(AwesomePrefixCheck MODULE "")
-target_include_directories(AwesomePrefixCheck
+add_library(StrToPathCheck MODULE "")
+target_include_directories(StrToPathCheck
     PRIVATE
         ${CLANG_INCLUDE_DIRS}
         ${LLVM_INCLUDE_DIRS}
 )
-target_sources(AwesomePrefixCheck PRIVATE ${CMAKE_CURRENT_LIST_DIR}/AwesomePrefixCheck.cpp)
+target_sources(StrToPathCheck PRIVATE ${CMAKE_CURRENT_LIST_DIR}/StrToPathCheck.cpp)

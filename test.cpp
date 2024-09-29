@@ -1,5 +1,6 @@
 #include <string>
 #include <filesystem>
+#include <string_view>
 
 void testDeclVar() {
     std::string s = "s";
@@ -80,8 +81,13 @@ void testReplace() {
     // CHECK: :[[# @LINE - 1 ]]:25: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
 }
 
+void testStringView() {
+    std::string_view sv{"sv"};
+    std::filesystem::path p = sv;
+    // CHECK: :[[# @LINE - 1 ]]:31: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
+}
+
 // TODO:
-// - string view
 // - std::filesystem::path::compare()
 // - operator= and std::filesystem::path::assign()
 // - std::filesystem::path::append() and std::filesystem::path::operator/=

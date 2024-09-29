@@ -1,4 +1,6 @@
-int fOO(void) {
-    if (1==1) {}
-    return 42;
+#include <string>
+#include <filesystem>
+
+void example() {
+    std::filesystem::path p = std::string("str");
 }

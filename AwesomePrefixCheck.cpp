@@ -21,16 +21,18 @@ public:
 
 void AwesomePrefixCheck::registerMatchers(MatchFinder* Finder)
 {
-    Finder->addMatcher(functionDecl().bind("add_awesome_prefix"), this);
+    auto hasTypeStr = hasType(type(hasUnqualifiedDesugaredType(recordType(hasDeclaration(recordDecl(hasName("::std::basic_string")))))));
+    auto hasTypePath = hasType(type(hasUnqualifiedDesugaredType(recordType(hasDeclaration(recordDecl(hasName("::std::filesystem::path")))))));
+    Finder->addMatcher(cxxConstructExpr(hasTypePath, hasArgument(0, expr(hasTypeStr).bind("str"))), this);
 }
 
 void AwesomePrefixCheck::check(const MatchFinder::MatchResult& Result)
 {
-    const auto* MatchedDecl = Result.Nodes.getNodeAs<FunctionDecl>("add_awesome_prefix");
-    if (!MatchedDecl->getIdentifier() || MatchedDecl->getName().starts_with("awesome_"))
-        return;
-    diag(MatchedDecl->getLocation(), "function %0 is insufficiently awesome") << MatchedDecl;
-    diag(MatchedDecl->getLocation(), "insert 'awesome'", DiagnosticIDs::Note) << FixItHint::CreateInsertion(MatchedDecl->getLocation(), "awesome_");
+    const auto *Str = Result.Nodes.getNodeAs<Expr>("str");
+    if(!Str) return;
+    const SourceManager &SM = Result.Context->getSourceManager();
+    if(SM.isInSystemHeader(Str->getBeginLoc())) return;
+    diag(Str->getBeginLoc(), "std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath()");
 }
 
 namespace {

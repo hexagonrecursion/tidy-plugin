@@ -25,4 +25,4 @@ target_include_directories(StrToPathCheck
         ${CLANG_INCLUDE_DIRS}
         ${LLVM_INCLUDE_DIRS}
 )
-target_sources(StrToPathCheck PRIVATE ${CMAKE_CURRENT_LIST_DIR}/StrToPathCheck.cpp)
+target_sources(StrToPathCheck PRIVATE StrToPathCheck.cpp)

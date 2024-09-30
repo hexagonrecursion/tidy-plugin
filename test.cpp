@@ -120,3 +120,13 @@ void testAssignment() {
     rp /= s;
     // CHECK: :[[# @LINE - 1 ]]:11: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
 }
+
+std::string testToString(std::string ss) {
+    std::filesystem::path p = "p";
+    std::string s = p;
+    // CHECK: :[[# @LINE - 1 ]]:21: warning: std::filesystem::path should not be converted to std::string without using TempToString() or StrUtils::ToString() [colobot-str2path]
+    testToString(p);
+    // CHECK: :[[# @LINE - 1 ]]:18: warning: std::filesystem::path should not be converted to std::string without using TempToString() or StrUtils::ToString() [colobot-str2path]
+    return p;
+    // CHECK: :[[# @LINE - 1 ]]:12: warning: std::filesystem::path should not be converted to std::string without using TempToString() or StrUtils::ToString() [colobot-str2path]
+}

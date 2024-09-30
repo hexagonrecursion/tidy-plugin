@@ -90,6 +90,7 @@ void testStringView() {
 void testMethods() {
     std::string s = "s";
     std::filesystem::path p = "p";
+    std::filesystem::path &rp = p;
 
     p.compare(s);
     // CHECK: :[[# @LINE - 1 ]]:15: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
@@ -99,11 +100,15 @@ void testMethods() {
     // CHECK: :[[# @LINE - 1 ]]:14: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
     p.concat(s);
     // CHECK: :[[# @LINE - 1 ]]:14: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
+
+    rp.append(s);
+    // CHECK: :[[# @LINE - 1 ]]:15: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
 }
 
 void testAssignment() {
     std::string s = "s";
     std::filesystem::path p = "p";
+    std::filesystem::path &rp = p;
 
     p = s;
     // CHECK: :[[# @LINE - 1 ]]:9: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
@@ -111,4 +116,7 @@ void testAssignment() {
     // CHECK: :[[# @LINE - 1 ]]:10: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
     p += s;
     // CHECK: :[[# @LINE - 1 ]]:10: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
+
+    rp /= s;
+    // CHECK: :[[# @LINE - 1 ]]:11: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
 }

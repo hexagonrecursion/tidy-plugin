@@ -45,6 +45,18 @@ void StringToPathCheck::registerMatchers(MatchFinder* Finder)
     );
     Finder->addMatcher(binaryOperation(isAssignmentOperator(), hasLHS(expr(hasTypePath)), hasRHS(expr(hasTypeStr).bind("str"))), this);
     Finder->addMatcher(cxxMemberCallExpr(on(expr(hasTypePath).bind("path")), callee(cxxConversionDecl()), hasTypeStr), this);
+    Finder->addMatcher(
+        cxxMemberCallExpr(
+            on(expr(hasTypePath).bind("path")),
+            callee(namedDecl(anyOf(
+                    hasName("c_str"),
+                    hasName("native"),
+                    hasName("string"),
+                    hasName("generic_string")
+            )))
+        ),
+        this
+    );
 }
 
 void StringToPathCheck::check(const MatchFinder::MatchResult& Result)

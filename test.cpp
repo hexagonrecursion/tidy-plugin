@@ -130,3 +130,15 @@ std::string testToString(std::string ss) {
     return p;
     // CHECK: :[[# @LINE - 1 ]]:12: warning: std::filesystem::path should not be converted to std::string without using TempToString() or StrUtils::ToString() [colobot-str2path]
 }
+
+void testToStringViaMethod() {
+    std::filesystem::path p = "p";
+    p.c_str();
+    // CHECK: :[[# @LINE - 1 ]]:5: warning: std::filesystem::path should not be converted to std::string without using TempToString() or StrUtils::ToString() [colobot-str2path]
+    p.native();
+    // CHECK: :[[# @LINE - 1 ]]:5: warning: std::filesystem::path should not be converted to std::string without using TempToString() or StrUtils::ToString() [colobot-str2path]
+    p.string();
+    // CHECK: :[[# @LINE - 1 ]]:5: warning: std::filesystem::path should not be converted to std::string without using TempToString() or StrUtils::ToString() [colobot-str2path]
+    p.generic_string();
+    // CHECK: :[[# @LINE - 1 ]]:5: warning: std::filesystem::path should not be converted to std::string without using TempToString() or StrUtils::ToString() [colobot-str2path]
+}

@@ -87,8 +87,21 @@ void testStringView() {
     // CHECK: :[[# @LINE - 1 ]]:31: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
 }
 
+void testMethods() {
+    std::string s = "s";
+    std::filesystem::path p = "p";
+
+    p.compare(s);
+    // CHECK: :[[# @LINE - 1 ]]:15: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
+    p.assign(s);
+    // CHECK: :[[# @LINE - 1 ]]:14: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
+    p.append(s);
+    // CHECK: :[[# @LINE - 1 ]]:14: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
+    p.concat(s);
+    // CHECK: :[[# @LINE - 1 ]]:14: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
+}
+
 // TODO:
-// - std::filesystem::path::compare()
-// - operator= and std::filesystem::path::assign()
-// - std::filesystem::path::append() and std::filesystem::path::operator/=
-// - std::filesystem::path::concat() and std::filesystem::path::operator+=
+// - operator=
+// - std::filesystem::path::operator/=
+// - std::filesystem::path::operator+=

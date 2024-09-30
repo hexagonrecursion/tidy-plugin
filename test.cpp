@@ -101,7 +101,14 @@ void testMethods() {
     // CHECK: :[[# @LINE - 1 ]]:14: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
 }
 
-// TODO:
-// - operator=
-// - std::filesystem::path::operator/=
-// - std::filesystem::path::operator+=
+void testAssignment() {
+    std::string s = "s";
+    std::filesystem::path p = "p";
+
+    p = s;
+    // CHECK: :[[# @LINE - 1 ]]:9: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
+    p /= s;
+    // CHECK: :[[# @LINE - 1 ]]:10: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
+    p += s;
+    // CHECK: :[[# @LINE - 1 ]]:10: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
+}

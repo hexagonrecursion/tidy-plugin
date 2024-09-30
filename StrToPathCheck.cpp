@@ -43,6 +43,7 @@ void StringToPathCheck::registerMatchers(MatchFinder* Finder)
         ),
         this
     );
+    Finder->addMatcher(binaryOperation(isAssignmentOperator(), hasLHS(expr(hasTypePath)), hasRHS(expr(hasTypeStr).bind("str"))), this);
 }
 
 void StringToPathCheck::check(const MatchFinder::MatchResult& Result)

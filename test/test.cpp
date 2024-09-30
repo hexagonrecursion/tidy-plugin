@@ -1,3 +1,4 @@
+// RUN: clang-tidy --checks=colobot-str2path --load %libStrToPathCheck %s -- -std=c++20 2>&1 | FileCheck %s
 #include <string>
 #include <filesystem>
 #include <string_view>

@@ -26,3 +26,4 @@ target_include_directories(StrToPathCheck
         ${LLVM_INCLUDE_DIRS}
 )
 target_sources(StrToPathCheck PRIVATE StrToPathCheck.cpp)
+add_subdirectory(test)

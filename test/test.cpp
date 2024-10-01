@@ -1,4 +1,4 @@
-// RUN: clang-tidy --checks=colobot-str2path --load %libStrToPathCheck %s -- -std=c++20 2>&1 | FileCheck %s
+// RUN: clang-tidy --checks=colobot-str2path --load %libStrToPathCheck %s -- -std=c++20 2>&1 | FileCheck --implicit-check-not warning: %s
 #include <string>
 #include <filesystem>
 #include <string_view>
@@ -53,24 +53,24 @@ std::filesystem::path testRet() {
 void testOperators() {
     std::string s = "s";
     std::filesystem::path p = "p";
-    p / s;
-    // CHECK: :[[# @LINE - 1 ]]:9: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
-    s / p;
-    // CHECK: :[[# @LINE - 1 ]]:5: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
-    s == p;
-    // CHECK: :[[# @LINE - 1 ]]:5: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
-    s != p;
-    // CHECK: :[[# @LINE - 1 ]]:5: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
-    s < p;
-    // CHECK: :[[# @LINE - 1 ]]:5: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
-    s <= p;
-    // CHECK: :[[# @LINE - 1 ]]:5: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
-    s > p;
-    // CHECK: :[[# @LINE - 1 ]]:5: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
-    s >= p;
-    // CHECK: :[[# @LINE - 1 ]]:5: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
-    s <=> p;
-    // CHECK: :[[# @LINE - 1 ]]:5: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
+    void(p / s);
+    // CHECK: :[[# @LINE - 1 ]]:14: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
+    void(s / p);
+    // CHECK: :[[# @LINE - 1 ]]:10: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
+    void(s == p);
+    // CHECK: :[[# @LINE - 1 ]]:10: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
+    void(s != p);
+    // CHECK: :[[# @LINE - 1 ]]:10: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
+    void(s < p);
+    // CHECK: :[[# @LINE - 1 ]]:10: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
+    void(s <= p);
+    // CHECK: :[[# @LINE - 1 ]]:10: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
+    void(s > p);
+    // CHECK: :[[# @LINE - 1 ]]:10: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
+    void(s >= p);
+    // CHECK: :[[# @LINE - 1 ]]:10: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
+    void(s <=> p);
+    // CHECK: :[[# @LINE - 1 ]]:10: warning: std::string should not be converted to std::filesystem::path without using TempToPath() or StrUtils::ToPath() [colobot-str2path]
 }
 
 void testReplace() {

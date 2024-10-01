@@ -21,7 +21,10 @@ public:
 
 void StringToPathCheck::registerMatchers(MatchFinder* Finder)
 {
-    auto hasTypeStr = hasType(type(hasUnqualifiedDesugaredType(recordType(hasDeclaration(recordDecl(anyOf(hasName("::std::basic_string"), hasName("::std::basic_string_view"))))))));
+    auto hasTypeStr = hasType(type(hasUnqualifiedDesugaredType(recordType(hasDeclaration(classTemplateSpecializationDecl(
+        anyOf(hasName("::std::basic_string"), hasName("::std::basic_string_view")),
+        hasTemplateArgument(0, templateArgument(refersToType(asString("char"))))
+    ))))));
     auto hasTypePath = hasType(type(hasUnqualifiedDesugaredType(recordType(hasDeclaration(recordDecl(hasName("::std::filesystem::path")))))));
     Finder->addMatcher(
         cxxConstructExpr(

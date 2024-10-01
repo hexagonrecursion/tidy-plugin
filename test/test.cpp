@@ -143,3 +143,9 @@ void testToStringViaMethod() {
     p.generic_string();
     // CHECK: :[[# @LINE - 1 ]]:5: warning: std::filesystem::path should not be converted to std::string without using TempToString() or StrUtils::ToString() [colobot-str2path]
 }
+
+void testNoWarn() {
+    std::u8string s = u8"s";
+    std::filesystem::path p = s;
+    // CHECK-NOE: warning:
+}
